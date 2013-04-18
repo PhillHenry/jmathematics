@@ -1,5 +1,13 @@
 package uk.co.odinconsultants.matrix;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+import uk.co.odinconsultants.permutation.SimpleIntPermutation;
+import uk.co.odinconsultants.permutation.leviCivita.LeviCivita;
+import uk.co.odinconsultants.permutation.leviCivita.SimpleLeviCivita;
+
 public class Mutable2DDoubleMatrix implements Double2DMatrix {
 
     private final double[][] matrix;
@@ -104,7 +112,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     }
 
     @Override
-    public boolean equals(Object something) { // does this board equal y?
+    public boolean equals(Object something) { 
         if (something == null)
             return false;
         if (!(something instanceof Double2DMatrix))
@@ -135,46 +143,73 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
         return szb.toString();
     }
 
-    public double determinant() {
-        if (height != width) throw new IllegalStateException("Not a square matrix");
+    private class SubMatrix {
+        private final PriorityQueue<Integer> colsToIgnore = new PriorityQueue<Integer>(Mutable2DDoubleMatrix.this.width);
+        private final PriorityQueue<Integer> rowsToIgnore = new PriorityQueue<Integer>(Mutable2DDoubleMatrix.this.height);
         
-        Mutable2DDoubleMatrix matrix = this;
-        return determinant(matrix, 0d);
-    }
+//        int width;
+//        int height;
 
-    private double determinant(Mutable2DDoubleMatrix outer, double accumulator) {
-        int rowIndx = 0;
-        //for (int rowIndx = 0 ; rowIndx < outer.getHeight() ; rowIndx++) {
-            for (int colIndx = 0 ; colIndx < outer.getWidth() ; colIndx++) {
-                Mutable2DDoubleMatrix inner = initializeInner(outer, rowIndx, colIndx);
-                if (inner.getHeight() == 2) {
-                    double myVal = outer.get(colIndx, rowIndx);
-                    double innerDeterminant = (inner.get(0, 0) * inner.get(1, 1)) - (inner.get(0, 1) * inner.get(1, 0));
-                    accumulator += myVal * innerDeterminant * (colIndx % 2 == 0 ? 1 : -1);
-                } else {
-                    return accumulator + determinant(inner, accumulator);
+        private SubMatrix() {
+//            this.width = width;
+//            this.height = height;
+        }
+        double get(int x, int y)  {
+            int newX = x + ignoringBlanks(colsToIgnore, x);
+            int newY = y + ignoringBlanks(rowsToIgnore, y);
+            return Mutable2DDoubleMatrix.this.get(newX, newY);
+        }
+        int ignoringBlanks(PriorityQueue<Integer> blanks, int index) {
+            int count = 0;
+            for (int i = 0 ; i < index || blanks.contains(count) ; i++) {
+                if (blanks.contains(count)) {
+                    count++;
                 }
             }
-        //}
+            return count;
+        }
+        void ignoreRow(int rowIndex) {
+            int newIndex = rowIndex + ignoringBlanks(rowsToIgnore, rowIndex);
+            rowsToIgnore.add(newIndex);
+        }
+        void ignoreColumn(int colIndex) {
+            int newIndex = colIndex + ignoringBlanks(colsToIgnore, colIndex);
+            colsToIgnore.add(newIndex);
+        }
+        boolean is2x2() {
+            return Mutable2DDoubleMatrix.this.width - colsToIgnore.size() == 2;
+        }
+    }
+    
+    public double determinant() {
+        if (height != width) throw new IllegalStateException("Not a square matrix");
+        LeviCivita  leviCivita      = new SimpleLeviCivita();
+        int         n               = height;
+        double      accumulator     = 0;
+        int[][]     permutations    = nonZeroPermutations(n);
+        for (int j = 0 ; j < permutations.length ; j++) {
+            double term = term(leviCivita, permutations[j]);
+            accumulator += term;
+        }
         return accumulator;
     }
 
-    private Mutable2DDoubleMatrix initializeInner(Mutable2DDoubleMatrix outer, int rowIndx,
-            int colIndx) {
-        Mutable2DDoubleMatrix inner = smaller(outer);
-        for (int x = 0 ; x < outer.getWidth() ; x++) {
-            if (x == colIndx) continue;
-            for (int y = 0 ; y < outer.getHeight() ; y++) {
-                if (y == rowIndx) continue;
-                inner.set(x > colIndx ? x - 1 : x, y > rowIndx ? y - 1 : y, outer.get(x, y));
-            }
+    private int[][] nonZeroPermutations(int n) {
+        return new SimpleIntPermutation().permutate(n);
+    }
+    
+    private double term(LeviCivita leviCivita, int[] indexes) {
+        int     n       = indexes.length;
+        double  term    = 1;
+        int     sign    = leviCivita.apply(indexes);
+        if (sign == 0) return 0;
+        
+        for (int j = 0 ; j < n ; j++) {
+            int k = indexes[j];
+            term *= get(j, k);
         }
-        return inner;
+        term *= sign;
+        return term;
     }
 
-    private Mutable2DDoubleMatrix smaller(Mutable2DDoubleMatrix matrix) {
-        return new Mutable2DDoubleMatrix(matrix.getHeight() - 1, matrix.getWidth() - 1);
-    }
-    
-    
 }
