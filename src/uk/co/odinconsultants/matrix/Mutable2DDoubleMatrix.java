@@ -144,44 +144,6 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
         return szb.toString();
     }
 
-    private class SubMatrix {
-        private final PriorityQueue<Integer> colsToIgnore = new PriorityQueue<Integer>(Mutable2DDoubleMatrix.this.width);
-        private final PriorityQueue<Integer> rowsToIgnore = new PriorityQueue<Integer>(Mutable2DDoubleMatrix.this.height);
-        
-//        int width;
-//        int height;
-
-        private SubMatrix() {
-//            this.width = width;
-//            this.height = height;
-        }
-        double get(int x, int y)  {
-            int newX = x + ignoringBlanks(colsToIgnore, x);
-            int newY = y + ignoringBlanks(rowsToIgnore, y);
-            return Mutable2DDoubleMatrix.this.get(newX, newY);
-        }
-        int ignoringBlanks(PriorityQueue<Integer> blanks, int index) {
-            int count = 0;
-            for (int i = 0 ; i < index || blanks.contains(count) ; i++) {
-                if (blanks.contains(count)) {
-                    count++;
-                }
-            }
-            return count;
-        }
-        void ignoreRow(int rowIndex) {
-            int newIndex = rowIndex + ignoringBlanks(rowsToIgnore, rowIndex);
-            rowsToIgnore.add(newIndex);
-        }
-        void ignoreColumn(int colIndex) {
-            int newIndex = colIndex + ignoringBlanks(colsToIgnore, colIndex);
-            colsToIgnore.add(newIndex);
-        }
-        boolean is2x2() {
-            return Mutable2DDoubleMatrix.this.width - colsToIgnore.size() == 2;
-        }
-    }
-    
     public double determinant() {
         LeviCivita      leviCivita      = new SimpleLeviCivita();
         IntPermutations intPermutation  = new SimpleIntPermutation();
