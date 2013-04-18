@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import uk.co.odinconsultants.permutation.IntPermutations;
 import uk.co.odinconsultants.permutation.SimpleIntPermutation;
 import uk.co.odinconsultants.permutation.leviCivita.LeviCivita;
 import uk.co.odinconsultants.permutation.leviCivita.SimpleLeviCivita;
@@ -182,20 +183,22 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     }
     
     public double determinant() {
+        LeviCivita      leviCivita      = new SimpleLeviCivita();
+        IntPermutations intPermutation  = new SimpleIntPermutation();
+        return determinant(leviCivita, intPermutation);
+    }
+
+    public double determinant(LeviCivita leviCivita, IntPermutations intPermutation) {
+        
         if (height != width) throw new IllegalStateException("Not a square matrix");
-        LeviCivita  leviCivita      = new SimpleLeviCivita();
         int         n               = height;
         double      accumulator     = 0;
-        int[][]     permutations    = nonZeroPermutations(n);
+        int[][]     permutations    = intPermutation.permutate(n);
         for (int j = 0 ; j < permutations.length ; j++) {
             double term = term(leviCivita, permutations[j]);
             accumulator += term;
         }
         return accumulator;
-    }
-
-    private int[][] nonZeroPermutations(int n) {
-        return new SimpleIntPermutation().permutate(n);
     }
     
     private double term(LeviCivita leviCivita, int[] indexes) {
