@@ -38,7 +38,7 @@ public class SimpleIntPermutation implements IntPermutations {
     /**
      * @see http://www.freewebs.com/permute/soda_submit.html
      */
-    void permute(int[] series) {
+    private void permute(int[] series) {
         int len     = series.length;
         int key     = len - 1;
 

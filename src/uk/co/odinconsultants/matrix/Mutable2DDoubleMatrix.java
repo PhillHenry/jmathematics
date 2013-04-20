@@ -22,15 +22,15 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     }
 
     @Override
-    public Double2DMatrix set(int x, int y, double value) {
+    public Mutable2DDoubleMatrix set(int x, int y, double value) {
         matrix[x][y] = value;
         return this;
     }
 
     @Override
-    public Double2DMatrix cross(Double2DMatrix other) {
+    public Mutable2DDoubleMatrix cross(Double2DMatrix other) {
         checkDimensions(other);
-        Double2DMatrix toReturn = new Mutable2DDoubleMatrix(height,
+        Mutable2DDoubleMatrix toReturn = new Mutable2DDoubleMatrix(height,
                 other.getWidth());
 
         for (int y = 0; y < height; y++) {
@@ -62,8 +62,8 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     }
 
     @Override
-    public Double2DMatrix transpose() {
-        Double2DMatrix other = new Mutable2DDoubleMatrix(width, height);
+    public Mutable2DDoubleMatrix transpose() {
+        Mutable2DDoubleMatrix other = new Mutable2DDoubleMatrix(width, height);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 other.set(y, x, this.get(x, y));
