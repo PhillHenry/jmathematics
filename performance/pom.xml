@@ -39,6 +39,11 @@
 							<exportAntProperties>true</exportAntProperties>
 							<target>
 								<property name="maven.classpath" refid="maven.runtime.classpath" />
+								<echo>
+								
+								Going to use maven classpath of ${maven.runtime.classpath}
+								
+								</echo>
 							</target>
 						</configuration>
 					</execution>
@@ -54,20 +59,16 @@
 						<id>caliper</id>
 						<phase>test</phase>
 						<goals>
-							<goal>java</goal>
+							<goal>exec</goal>
 						</goals>
 						<configuration>
 							<executable>java</executable>
-							<mainClass>com.google.caliper.Runner</mainClass>
 							<arguments>
+							    <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>com.google.caliper.Runner</argument>
 								<argument>com.google.code.jmathematics.matrix.MatrixBenchmark</argument>
 							</arguments>
-							<systemProperties>
-								<systemProperty>
-									<key>java.class.path</key>
-									<value>${maven.classpath}</value>
-								</systemProperty>
-							</systemProperties>
 						</configuration>
 
 					</execution>
