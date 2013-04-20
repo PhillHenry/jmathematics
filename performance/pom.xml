@@ -26,30 +26,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>define-classpath</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<exportAntProperties>true</exportAntProperties>
-							<target>
-								<property name="maven.classpath" refid="maven.runtime.classpath" />
-								<echo>
-								
-								Going to use maven classpath of ${maven.runtime.classpath}
-								
-								</echo>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
@@ -70,7 +46,6 @@
 								<argument>com.google.code.jmathematics.matrix.MatrixBenchmark</argument>
 							</arguments>
 						</configuration>
-
 					</execution>
 				</executions>
 			</plugin>
