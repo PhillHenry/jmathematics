@@ -1,59 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>parent</artifactId>
-        <groupId>com.google.code.jmathematics</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>parent</artifactId>
+		<groupId>com.google.code.jmathematics</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>performance</artifactId>
+	<artifactId>performance</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.caliper</groupId>
-            <artifactId>caliper</artifactId>
-            <version>0.5-rc1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.jmathematics</groupId>
-            <artifactId>core</artifactId>
-            <version>${pom.parent.version}</version>
-        </dependency>
-    </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>com.google.caliper</groupId>
+			<artifactId>caliper</artifactId>
+			<version>0.5-rc1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.jmathematics</groupId>
+			<artifactId>core</artifactId>
+			<version>${pom.parent.version}</version>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>define-classpath</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<exportAntProperties>true</exportAntProperties>
+							<target>
+								<property name="maven.classpath" refid="maven.runtime.classpath" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
 
-                <executions>
-                    <execution>
-                        <id>caliper</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>com.google.caliper.Runner</mainClass>
-                            <arguments>
-                                <argument>com.google.code.jmathematics.matrix.MatrixBenchmark</argument>
-                            </arguments>
-                            <!--<systemProperties>-->
-                                <!--<systemProperty>-->
-                                    <!--<key>java.class.path</key>-->
-                                    <!--<value>${pom.dependencyManagement}</value>-->
-                                <!--</systemProperty>-->
-                            <!--</systemProperties>-->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+				<executions>
+					<execution>
+						<id>caliper</id>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<executable>java</executable>
+							<mainClass>com.google.caliper.Runner</mainClass>
+							<arguments>
+								<argument>com.google.code.jmathematics.matrix.MatrixBenchmark</argument>
+							</arguments>
+							<systemProperties>
+								<systemProperty>
+									<key>java.class.path</key>
+									<value>${maven.classpath}</value>
+								</systemProperty>
+							</systemProperties>
+						</configuration>
 
-        </plugins>
-    </build>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>
