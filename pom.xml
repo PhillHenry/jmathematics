@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>core</module>
-        <module>performance</module>
+        <module>jmathematics-core</module>
+        <module>jmathematics-performance</module>
     </modules>
 </project>
