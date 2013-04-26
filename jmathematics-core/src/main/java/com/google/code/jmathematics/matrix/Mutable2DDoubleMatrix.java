@@ -7,14 +7,16 @@ import com.google.code.jmathematics.permutation.leviCivita.SimpleLeviCivita;
 
 public class Mutable2DDoubleMatrix implements Double2DMatrix {
 
-    private final double[][] matrix;
-    private final int        width;
-    private final int        height;
+    private final double[][]        matrix;
+    private final int               width;
+    private final int               height;
+    private final Matrix2DChecker   sizeChecker;;
 
     public Mutable2DDoubleMatrix(int rows, int columns) {
-        width = columns;
-        height = rows;
-        matrix = new double[width][height];
+        width       = columns;
+        height      = rows;
+        matrix      = new double[width][height];
+        sizeChecker = new NoisyMatrix2DChecker(this);
     }
 
     @Override
@@ -25,7 +27,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
 
     @Override
     public Mutable2DDoubleMatrix cross(Double2DMatrix other) {
-        checkDimensions(other);
+        sizeChecker.checkDimensions(other);
         Mutable2DDoubleMatrix toReturn = new Mutable2DDoubleMatrix(height,
                 other.getWidth());
 
@@ -46,7 +48,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
 
     @Override
     public double dot(Double2DMatrix other) {
-        checkDimensions(other);
+        sizeChecker.checkDimensions(other);
 
         double total = 0;
         for (int x = 0; x < width; x++) {
@@ -66,21 +68,6 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
             }
         }
         return other;
-    }
-
-    private void checkDimensions(Double2DMatrix other) {
-        if (other.getHeight() != this.getWidth()) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "Width not equal. This width is <%d>. Other's height <%d>.",
-                            this.width, other.getHeight()));
-        }
-        if (other.getWidth() != this.getHeight()) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "Incompatible dimenstions. This height is <%d>. Other's width is <%d>.",
-                            this.height, other.getWidth()));
-        }
     }
 
     @Override
@@ -147,7 +134,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     }
 
     public double determinant(LeviCivita leviCivita, IntPermutations intPermutation) {
-        
+        sizeChecker.checkSquare();
         if (height != width) throw new IllegalStateException("Not a square matrix");
         int         n               = height;
         double      accumulator     = 0;
