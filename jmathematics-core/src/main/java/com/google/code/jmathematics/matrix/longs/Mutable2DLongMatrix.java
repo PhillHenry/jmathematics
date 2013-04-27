@@ -2,6 +2,8 @@ package com.google.code.jmathematics.matrix.longs;
 
 import com.google.code.jmathematics.matrix.Matrix2DChecker;
 import com.google.code.jmathematics.matrix.NoisyMatrix2DChecker;
+import com.google.code.jmathematics.matrix.determinant.DoubleDeterminantVisitor;
+import com.google.code.jmathematics.matrix.determinant.LongDeterminantVisitor;
 
 public class Mutable2DLongMatrix implements Long2DMatrix {
     
@@ -10,7 +12,7 @@ public class Mutable2DLongMatrix implements Long2DMatrix {
     private final int               height;
     private final Matrix2DChecker   sizeChecker;
 
-    private Mutable2DLongMatrix(int rows, int columns) {
+    public Mutable2DLongMatrix(int rows, int columns) {
         width       = columns;
         height      = rows;
         matrix      = new long[width][height];
@@ -93,6 +95,11 @@ public class Mutable2DLongMatrix implements Long2DMatrix {
             }
         }
         return this;
+    }
+
+    @Override
+    public long determinant(LongDeterminantVisitor visitor) {
+        return visitor.calculateDeterminant(this);
     }
 
 }

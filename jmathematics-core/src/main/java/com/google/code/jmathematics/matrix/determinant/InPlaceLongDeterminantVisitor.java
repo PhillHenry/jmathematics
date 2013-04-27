@@ -2,21 +2,21 @@ package com.google.code.jmathematics.matrix.determinant;
 
 import com.google.code.jmathematics.matrix.TwoDimensionalMatrix;
 import com.google.code.jmathematics.matrix.doubles.Double2DMatrix;
+import com.google.code.jmathematics.matrix.longs.Long2DMatrix;
 import com.google.code.jmathematics.permutation.IntPermutations;
 import com.google.code.jmathematics.permutation.SimpleIntPermutation;
 import com.google.code.jmathematics.permutation.leviCivita.LeviCivita;
 import com.google.code.jmathematics.permutation.leviCivita.SimpleLeviCivita;
 
-public class InPlaceDoubleDeterminantVisitor implements
-        DoubleDeterminantVisitor {
-
+public class InPlaceLongDeterminantVisitor implements LongDeterminantVisitor {
+    
     private static final IllegalStateException NOT_SQUARE_X = new IllegalStateException("Not a square matrix");
     
     private final LeviCivita      leviCivita      = new SimpleLeviCivita();
     private final IntPermutations intPermutation  = new SimpleIntPermutation();
-    
+
     @Override
-    public double calculateDeterminant(Double2DMatrix matrix) {
+    public long calculateDeterminant(Long2DMatrix matrix) {
         return determinant(matrix);
     }
 
@@ -24,21 +24,21 @@ public class InPlaceDoubleDeterminantVisitor implements
         if (matrix.getHeight() != matrix.getWidth()) throw NOT_SQUARE_X;
     }
 
-    private double determinant(Double2DMatrix matrix) {
+    private long determinant(Long2DMatrix matrix) {
         checkSquare(matrix);
         int         n               = matrix.getHeight();
-        double      accumulator     = 0;
+        long        accumulator     = 0;
         int[][]     permutations    = intPermutation.permutate(n);
         for (int j = 0 ; j < permutations.length ; j++) {
-            double term = term(permutations[j], matrix);
+            long term = term(permutations[j], matrix);
             accumulator += term;
         }
         return accumulator;
     }
     
-    private double term(int[] indexes, Double2DMatrix matrix) {
+    private long term(int[] indexes, Long2DMatrix matrix) {
         int     n       = indexes.length;
-        double  term    = 1;
+        long    term    = 1;
         int     sign    = leviCivita.apply(indexes);
         if (sign == 0) return 0;
         
