@@ -1,6 +1,7 @@
 package com.google.code.jmathematics.matrix;
 
 import com.google.caliper.SimpleBenchmark;
+import com.google.code.jmathematics.matrix.doubles.Mutable2DDoubleMatrix;
 
 
 public class MatrixBenchmark extends SimpleBenchmark {

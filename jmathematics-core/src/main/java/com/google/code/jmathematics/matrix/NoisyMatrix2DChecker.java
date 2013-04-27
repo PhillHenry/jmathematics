@@ -2,10 +2,9 @@ package com.google.code.jmathematics.matrix;
 
 public class NoisyMatrix2DChecker implements Matrix2DChecker {
     
-    
     private final TwoDimensionalMatrix me;
 
-    NoisyMatrix2DChecker(TwoDimensionalMatrix me) {
+    public NoisyMatrix2DChecker(TwoDimensionalMatrix me) {
         super();
         this.me = me;
     }
