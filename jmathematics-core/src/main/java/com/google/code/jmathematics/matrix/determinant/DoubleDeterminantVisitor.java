@@ -1,6 +1,6 @@
 package com.google.code.jmathematics.matrix.determinant;
 
-import com.google.code.jmathematics.matrix.Double2DMatrix;
+import com.google.code.jmathematics.matrix.doubles.Double2DMatrix;
 
 public interface DoubleDeterminantVisitor {
     

@@ -1,5 +1,7 @@
 package com.google.code.jmathematics.matrix;
 
+import com.google.code.jmathematics.matrix.doubles.Double2DMatrix;
+
 public class Double2DMatrixBuilder {
 
     public <T extends Double2DMatrix> T initialize(T initial) {

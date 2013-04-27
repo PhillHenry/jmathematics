@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.code.jmathematics.matrix.determinant.InPlaceDoubleDeterminantVisitor;
+import com.google.code.jmathematics.matrix.doubles.Mutable2DDoubleMatrix;
 
 import static org.junit.Assert.assertEquals;
 
