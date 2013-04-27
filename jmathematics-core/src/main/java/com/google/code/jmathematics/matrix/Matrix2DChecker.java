@@ -4,6 +4,4 @@ interface Matrix2DChecker {
     
     public void checkDimensions(TwoDimensionalMatrix other);
     
-    public void checkSquare();
-    
 }

@@ -3,6 +3,8 @@ package com.google.code.jmathematics.matrix;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.code.jmathematics.matrix.determinant.InPlaceDoubleDeterminantVisitor;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -61,7 +63,7 @@ public class Mutable2DDoubleMatrixTest {
     @Test
     public void shouldDetermineDeterminant() {
         Mutable2DDoubleMatrix matrix = create(new double[][] { new double[] { 2d, -2d, 0d }, new double[] { -1, 5, 1 }, new double[] { 3d, 4d, 5d } });
-        assertEquals(26, matrix.determinant(), 0);
+        assertEquals(26, matrix.determinant(new InPlaceDoubleDeterminantVisitor()), 0);
     }
     
     @Test

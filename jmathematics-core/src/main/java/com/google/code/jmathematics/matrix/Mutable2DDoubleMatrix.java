@@ -1,5 +1,6 @@
 package com.google.code.jmathematics.matrix;
 
+import com.google.code.jmathematics.matrix.determinant.DoubleDeterminantVisitor;
 import com.google.code.jmathematics.permutation.IntPermutations;
 import com.google.code.jmathematics.permutation.SimpleIntPermutation;
 import com.google.code.jmathematics.permutation.leviCivita.LeviCivita;
@@ -10,7 +11,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     private final double[][]        matrix;
     private final int               width;
     private final int               height;
-    private final Matrix2DChecker   sizeChecker;;
+    private final Matrix2DChecker   sizeChecker;
 
     public Mutable2DDoubleMatrix(int rows, int columns) {
         width       = columns;
@@ -85,6 +86,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
         return height;
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public Mutable2DDoubleMatrix scalar(double other) {
         for (int y = 0; y < height; y++) {
@@ -127,37 +129,11 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
         return szb.toString();
     }
 
-    public double determinant() {
-        LeviCivita      leviCivita      = new SimpleLeviCivita();
-        IntPermutations intPermutation  = new SimpleIntPermutation();
-        return determinant(leviCivita, intPermutation);
+    @Override
+    public double determinant(DoubleDeterminantVisitor visitor) {
+        return visitor.calculateDeterminant(this);
     }
 
-    public double determinant(LeviCivita leviCivita, IntPermutations intPermutation) {
-        sizeChecker.checkSquare();
-        if (height != width) throw new IllegalStateException("Not a square matrix");
-        int         n               = height;
-        double      accumulator     = 0;
-        int[][]     permutations    = intPermutation.permutate(n);
-        for (int j = 0 ; j < permutations.length ; j++) {
-            double term = term(leviCivita, permutations[j]);
-            accumulator += term;
-        }
-        return accumulator;
-    }
-    
-    private double term(LeviCivita leviCivita, int[] indexes) {
-        int     n       = indexes.length;
-        double  term    = 1;
-        int     sign    = leviCivita.apply(indexes);
-        if (sign == 0) return 0;
-        
-        for (int j = 0 ; j < n ; j++) {
-            int k = indexes[j];
-            term *= get(j, k);
-        }
-        term *= sign;
-        return term;
-    }
+
 
 }
