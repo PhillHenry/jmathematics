@@ -3,6 +3,8 @@ package com.google.code.jmathematics.matrix;
 import com.google.caliper.SimpleBenchmark;
 import com.google.code.jmathematics.matrix.doubles.Double2DMatrix;
 import com.google.code.jmathematics.matrix.doubles.Mutable2DDoubleMatrix;
+import com.google.code.jmathematics.matrix.integer.Int2DMatrix;
+import com.google.code.jmathematics.matrix.integer.Mutable2DIntMatrix;
 import com.google.code.jmathematics.matrix.longs.Long2DMatrix;
 import com.google.code.jmathematics.matrix.longs.Mutable2DLongMatrix;
 
@@ -11,12 +13,15 @@ public class MatrixBenchmark extends SimpleBenchmark {
 
     private final Mutable2DDoubleMatrix mutable2DDoubleMatrix;
     private final Mutable2DLongMatrix mutable2DLongMatrix;
+    private final Mutable2DIntMatrix mutable2DIntMatrix;
 
     public MatrixBenchmark() {
         mutable2DDoubleMatrix = new Mutable2DDoubleMatrix(100, 100);
         mutable2DLongMatrix = new Mutable2DLongMatrix(100, 100);
+        mutable2DIntMatrix = new Mutable2DIntMatrix(100, 100);
         populate(mutable2DDoubleMatrix);
         populate(mutable2DLongMatrix);
+        populate(mutable2DIntMatrix);
     }
 
     private void populate(Double2DMatrix doubleMatrix) {
@@ -28,6 +33,14 @@ public class MatrixBenchmark extends SimpleBenchmark {
     }
     
     private void populate(Long2DMatrix longMatrix) {
+        for (int i = 0 ; i < longMatrix.getHeight() ; i++) {
+            for (int j = 0 ; j < longMatrix.getWidth() ; j++) {
+                longMatrix = longMatrix.set(j, i, j * i);
+            }
+        }
+    }
+    
+    private void populate(Int2DMatrix longMatrix) {
         for (int i = 0 ; i < longMatrix.getHeight() ; i++) {
             for (int j = 0 ; j < longMatrix.getWidth() ; j++) {
                 longMatrix = longMatrix.set(j, i, j * i);
@@ -59,6 +72,15 @@ public class MatrixBenchmark extends SimpleBenchmark {
         return accumulator == null ? 0 : accumulator.getWidth();
     }
     
-
+    /**
+     * 67% Scenario{vm=java, trial=0, benchmark=Mutable2DIntMatrixCross} 1660000.58 ns; ?=194289.51 ns @ 10 trials
+     */
+    public int timeMutable2DIntMatrixCross(int reps) {
+        Mutable2DIntMatrix accumulator = null;
+        for (int i = 0 ; i < reps ; i++) {
+            accumulator = mutable2DIntMatrix.cross(mutable2DIntMatrix);
+        }
+        return accumulator == null ? 0 : accumulator.getWidth();
+    }
 
 }
