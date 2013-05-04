@@ -1,7 +1,5 @@
 package com.google.code.jmathematics.matrix;
 
-import java.math.BigDecimal;
-
 import com.google.caliper.SimpleBenchmark;
 import com.google.code.jmathematics.matrix.doubles.Double2DMatrix;
 import com.google.code.jmathematics.matrix.doubles.Mutable2DDoubleMatrix;
@@ -13,7 +11,39 @@ import com.google.code.jmathematics.matrix.number.BigDecimalMutable2DMatrix;
 import com.google.code.jmathematics.matrix.number.IntegerMutable2DMatrix;
 import com.google.code.jmathematics.matrix.number.MutableNumber2DMatrix;
 
+import java.math.BigDecimal;
 
+/**
+ * On a 64-bit, 16-core, Xeon(R) CPU E5-2687W 0 @ 3.10GHz (Using primitive doubles)
+ 0% Scenario{vm=java, trial=0, benchmark=Mutable2DDoubleMatrixCross} 899101.45 ns; σ=18207.88 ns @ 10 trials
+ 20% Scenario{vm=java, trial=0, benchmark=Mutable2DIntMatrixCross} 1124666.62 ns; σ=8221.81 ns @ 3 trials
+ 40% Scenario{vm=java, trial=0, benchmark=Mutable2DNumberIntMatrixCross} 9286670.69 ns; σ=87540.45 ns @ 3 trials
+ 60% Scenario{vm=java, trial=0, benchmark=Mutable2DNumberBigDecimalMatrixCross} 34734860.78 ns; σ=313435.58 ns @ 4 trials
+ 80% Scenario{vm=java, trial=0, benchmark=Mutable2DLongMatrixCross} 1042197.65 ns; σ=9154.55 ns @ 3 trials
+
+ benchmark    us linear runtime
+ Mutable2DDoubleMatrixCross             899 =
+ Mutable2DIntMatrixCross               1125 =
+ Mutable2DNumberIntMatrixCross         9287 ========
+ Mutable2DNumberBigDecimalMatrixCross 34735 ==============================
+ Mutable2DLongMatrixCross              1042 =
+
+ *
+ * On a 64-bit, 16-core, Xeon(R) CPU E5-2687W 0 @ 3.10GHz (Using Doubles)
+ 0% Scenario{vm=java, trial=0, benchmark=Mutable2DLongMatrixCross} 1052177.50 ns; σ=9489.12 ns @ 3 trials
+ 20% Scenario{vm=java, trial=0, benchmark=Mutable2DDoubleMatrixCross} 2874897.19 ns; σ=17769.76 ns @ 3 trials
+ 40% Scenario{vm=java, trial=0, benchmark=Mutable2DIntMatrixCross} 1130110.33 ns; σ=9865.28 ns @ 3 trials
+ 60% Scenario{vm=java, trial=0, benchmark=Mutable2DNumberIntMatrixCross} 9401464.68 ns; σ=93042.49 ns @ 5 trials
+ 80% Scenario{vm=java, trial=0, benchmark=Mutable2DNumberBigDecimalMatrixCross} 35476913.96 ns; σ=301030.49 ns @ 3 trials
+
+ benchmark    ms linear runtime
+ Mutable2DLongMatrixCross              1.05 =
+ Mutable2DDoubleMatrixCross            2.87 ==
+ Mutable2DIntMatrixCross               1.13 =
+ Mutable2DNumberIntMatrixCross         9.40 =======
+ Mutable2DNumberBigDecimalMatrixCross 35.48 ==============================
+
+ */
 public class MatrixBenchmark extends SimpleBenchmark {
 
     private final Mutable2DDoubleMatrix mutable2DDoubleMatrix;
@@ -76,6 +106,7 @@ public class MatrixBenchmark extends SimpleBenchmark {
     }
 
     /**
+     * On a 1.8 GHz Intel Core i7 Mac OS X 10.7.5:
      * 50% Scenario{vm=java, trial=0, benchmark=Mutable2DLongMatrixCross} 1402965.83 ns; ?=12970.73 ns @ 6 trials
      */
     public int timeMutable2DLongMatrixCross(int reps) {
@@ -100,6 +131,7 @@ public class MatrixBenchmark extends SimpleBenchmark {
     }
     
     /**
+     * On a 1.8 GHz Intel Core i7 Mac OS X 10.7.5:
      * 67% Scenario{vm=java, trial=0, benchmark=Mutable2DIntMatrixCross} 1660000.58 ns; ?=194289.51 ns @ 10 trials
      */
     public int timeMutable2DIntMatrixCross(int reps) {
@@ -111,6 +143,7 @@ public class MatrixBenchmark extends SimpleBenchmark {
     }
 
     /**
+     * On a 1.8 GHz Intel Core i7 Mac OS X 10.7.5:
      * 75% Scenario{vm=java, trial=0, benchmark=Mutable2DNumberIntMatrixCross} 21126510.42 ns; ?=1989877.40 ns @ 10 trials
      */
     public int timeMutable2DNumberIntMatrixCross(int reps) {
@@ -122,6 +155,7 @@ public class MatrixBenchmark extends SimpleBenchmark {
     }
     
     /**
+     * On a 1.8 GHz Intel Core i7 Mac OS X 10.7.5:
      * 80% Scenario{vm=java, trial=0, benchmark=Mutable2DNumberBigDecimalMatrixCross} 58411000.00 ns; ?=3927557.14 ns @ 10 trials
      */
     public int timeMutable2DNumberBigDecimalMatrixCross(int reps) {
