@@ -1,15 +1,16 @@
 package com.google.code.jmathematics.matrix.number;
 
-@SuppressWarnings("unchecked")
-public class IntegerMutable2DMatrix extends MutableNumber2DMatrix {
+import java.math.BigDecimal;
 
-    public IntegerMutable2DMatrix(int rows, int columns) {
+public class BigDecimalMutableMatrix extends MutableNumberMatrix {
+
+    public BigDecimalMutableMatrix(int rows, int columns) {
         super(rows, columns);
     }
 
     @Override
     public Number add(Number thisValue, Number thatValue) {
-        return ((Integer)thisValue) + ((Integer)thatValue);
+        return ((BigDecimal)thisValue).add((BigDecimal)thatValue);
     }
 
     @Override
@@ -20,17 +21,16 @@ public class IntegerMutable2DMatrix extends MutableNumber2DMatrix {
 
     @Override
     public Number multiply(Number thisValue, Number thatValue) {
-        return ((Integer)thisValue) * ((Integer)thatValue);
+        return ((BigDecimal)thisValue).multiply((BigDecimal)thatValue);
     }
 
     @Override
-    protected MutableNumber2DMatrix create(int width, int height) {
-        return new IntegerMutable2DMatrix(height, width);
+    protected MutableNumberMatrix create(int width, int height) {
+        return new BigDecimalMutableMatrix(height, width);
     }
-
+    
     @Override
     public Number zero() {
-        return 0;
+        return new BigDecimal(0);
     }
-
 }

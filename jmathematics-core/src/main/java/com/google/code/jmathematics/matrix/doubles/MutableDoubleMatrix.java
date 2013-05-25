@@ -1,37 +1,37 @@
 package com.google.code.jmathematics.matrix.doubles;
 
-import com.google.code.jmathematics.matrix.Matrix2DChecker;
-import com.google.code.jmathematics.matrix.NoisyMatrix2DChecker;
+import com.google.code.jmathematics.matrix.MatrixChecker;
+import com.google.code.jmathematics.matrix.NoisyMatrixChecker;
 import com.google.code.jmathematics.matrix.determinant.DoubleDeterminantVisitor;
 import com.google.code.jmathematics.permutation.IntPermutations;
 import com.google.code.jmathematics.permutation.SimpleIntPermutation;
 import com.google.code.jmathematics.permutation.leviCivita.LeviCivita;
 import com.google.code.jmathematics.permutation.leviCivita.SimpleLeviCivita;
 
-public class Mutable2DDoubleMatrix implements Double2DMatrix {
+public class MutableDoubleMatrix implements DoubleMatrix {
 
     private final double[][]        matrix;
     private final int               width;
     private final int               height;
-    private final Matrix2DChecker   sizeChecker;
+    private final MatrixChecker   sizeChecker;
 
-    public Mutable2DDoubleMatrix(int rows, int columns) {
+    public MutableDoubleMatrix(int rows, int columns) {
         width       = columns;
         height      = rows;
         matrix      = new double[width][height];
-        sizeChecker = new NoisyMatrix2DChecker(this);
+        sizeChecker = new NoisyMatrixChecker(this);
     }
 
     @Override
-    public Mutable2DDoubleMatrix set(int x, int y, double value) {
+    public MutableDoubleMatrix set(int x, int y, double value) {
         matrix[x][y] = value;
         return this;
     }
 
     @Override
-    public Mutable2DDoubleMatrix cross(Double2DMatrix other) {
+    public MutableDoubleMatrix cross(DoubleMatrix other) {
         sizeChecker.checkDimensions(other);
-        Mutable2DDoubleMatrix toReturn = new Mutable2DDoubleMatrix(height,
+        MutableDoubleMatrix toReturn = new MutableDoubleMatrix(height,
                 other.getWidth());
 
         for (int y = 0; y < height; y++) {
@@ -50,7 +50,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     }
 
     @Override
-    public double dot(Double2DMatrix other) {
+    public double dot(DoubleMatrix other) {
         sizeChecker.checkDimensions(other);
 
         double total = 0;
@@ -63,8 +63,8 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     }
 
     @Override
-    public Mutable2DDoubleMatrix transpose() {
-        Mutable2DDoubleMatrix other = new Mutable2DDoubleMatrix(width, height);
+    public MutableDoubleMatrix transpose() {
+        MutableDoubleMatrix other = new MutableDoubleMatrix(width, height);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 other.set(y, x, this.get(x, y));
@@ -90,7 +90,7 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     
     @SuppressWarnings("unchecked")
     @Override
-    public Mutable2DDoubleMatrix scalar(double other) {
+    public MutableDoubleMatrix scalar(double other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 set(x, y, get(x, y) * other);
@@ -103,9 +103,9 @@ public class Mutable2DDoubleMatrix implements Double2DMatrix {
     public boolean equals(Object something) { 
         if (something == null)
             return false;
-        if (!(something instanceof Double2DMatrix))
+        if (!(something instanceof DoubleMatrix))
             return false;
-        Double2DMatrix other = (Double2DMatrix) something;
+        DoubleMatrix other = (DoubleMatrix) something;
         if (other.getHeight() != this.getHeight())
             return false;
         if (other.getWidth() != this.getWidth())

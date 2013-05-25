@@ -1,22 +1,22 @@
 package com.google.code.jmathematics.matrix.longs;
 
-import com.google.code.jmathematics.matrix.Matrix2DChecker;
-import com.google.code.jmathematics.matrix.NoisyMatrix2DChecker;
+import com.google.code.jmathematics.matrix.MatrixChecker;
+import com.google.code.jmathematics.matrix.NoisyMatrixChecker;
 import com.google.code.jmathematics.matrix.determinant.DoubleDeterminantVisitor;
 import com.google.code.jmathematics.matrix.determinant.LongDeterminantVisitor;
 
-public class Mutable2DLongMatrix implements Long2DMatrix {
+public class MutableLongMatrix implements LongMatrix {
     
     private final long[][]          matrix;
     private final int               width;
     private final int               height;
-    private final Matrix2DChecker   sizeChecker;
+    private final MatrixChecker   sizeChecker;
 
-    public Mutable2DLongMatrix(int rows, int columns) {
+    public MutableLongMatrix(int rows, int columns) {
         width       = columns;
         height      = rows;
         matrix      = new long[width][height];
-        sizeChecker = new NoisyMatrix2DChecker(this);
+        sizeChecker = new NoisyMatrixChecker(this);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class Mutable2DLongMatrix implements Long2DMatrix {
     }
 
     @Override
-    public Long2DMatrix transpose() {
-        Mutable2DLongMatrix other = new Mutable2DLongMatrix(width, height);
+    public LongMatrix transpose() {
+        MutableLongMatrix other = new MutableLongMatrix(width, height);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 other.set(y, x, this.get(x, y));
@@ -41,9 +41,9 @@ public class Mutable2DLongMatrix implements Long2DMatrix {
     }
 
     @Override
-    public Mutable2DLongMatrix cross(Long2DMatrix other) {
+    public MutableLongMatrix cross(LongMatrix other) {
         sizeChecker.checkDimensions(other);
-        Mutable2DLongMatrix toReturn = new Mutable2DLongMatrix(height,
+        MutableLongMatrix toReturn = new MutableLongMatrix(height,
                 other.getWidth());
 
         for (int y = 0; y < height; y++) {
@@ -63,7 +63,7 @@ public class Mutable2DLongMatrix implements Long2DMatrix {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Mutable2DLongMatrix set(int x, int y, long value) {
+    public MutableLongMatrix set(int x, int y, long value) {
         matrix[x][y] = value;
         return this;
     }
@@ -74,7 +74,7 @@ public class Mutable2DLongMatrix implements Long2DMatrix {
     }
 
     @Override
-    public long dot(Long2DMatrix other) {
+    public long dot(LongMatrix other) {
         sizeChecker.checkDimensions(other);
 
         long total = 0;
@@ -88,7 +88,7 @@ public class Mutable2DLongMatrix implements Long2DMatrix {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Mutable2DLongMatrix scalar(long other) {
+    public MutableLongMatrix scalar(long other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 set(x, y, get(x, y) * other);

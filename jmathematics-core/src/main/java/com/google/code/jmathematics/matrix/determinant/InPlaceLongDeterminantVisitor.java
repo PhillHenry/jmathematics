@@ -1,8 +1,8 @@
 package com.google.code.jmathematics.matrix.determinant;
 
-import com.google.code.jmathematics.matrix.TwoDimensionalMatrix;
-import com.google.code.jmathematics.matrix.doubles.Double2DMatrix;
-import com.google.code.jmathematics.matrix.longs.Long2DMatrix;
+import com.google.code.jmathematics.matrix.SizedMatrix;
+import com.google.code.jmathematics.matrix.doubles.DoubleMatrix;
+import com.google.code.jmathematics.matrix.longs.LongMatrix;
 import com.google.code.jmathematics.permutation.IntPermutations;
 import com.google.code.jmathematics.permutation.SimpleIntPermutation;
 import com.google.code.jmathematics.permutation.leviCivita.LeviCivita;
@@ -16,15 +16,15 @@ public class InPlaceLongDeterminantVisitor implements LongDeterminantVisitor {
     private final IntPermutations intPermutation  = new SimpleIntPermutation();
 
     @Override
-    public long calculateDeterminant(Long2DMatrix matrix) {
+    public long calculateDeterminant(LongMatrix matrix) {
         return determinant(matrix);
     }
 
-    private void checkSquare(TwoDimensionalMatrix matrix) {
+    private void checkSquare(SizedMatrix matrix) {
         if (matrix.getHeight() != matrix.getWidth()) throw NOT_SQUARE_X;
     }
 
-    private long determinant(Long2DMatrix matrix) {
+    private long determinant(LongMatrix matrix) {
         checkSquare(matrix);
         int         n               = matrix.getHeight();
         long        accumulator     = 0;
@@ -36,7 +36,7 @@ public class InPlaceLongDeterminantVisitor implements LongDeterminantVisitor {
         return accumulator;
     }
     
-    private long term(int[] indexes, Long2DMatrix matrix) {
+    private long term(int[] indexes, LongMatrix matrix) {
         int     n       = indexes.length;
         long    term    = 1;
         int     sign    = leviCivita.apply(indexes);

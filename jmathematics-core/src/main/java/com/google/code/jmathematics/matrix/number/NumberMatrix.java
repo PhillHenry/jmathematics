@@ -1,18 +1,18 @@
 package com.google.code.jmathematics.matrix.number;
 
 import com.google.code.jmathematics.matrix.Matrix;
-import com.google.code.jmathematics.matrix.TwoDimensionalMatrix;
+import com.google.code.jmathematics.matrix.SizedMatrix;
 import com.google.code.jmathematics.matrix.determinant.NumberDeterminantVisitor;
 
-public interface Number2DMatrix extends TwoDimensionalMatrix, Matrix<Number2DMatrix> {
+public interface NumberMatrix extends SizedMatrix, Matrix<NumberMatrix> {
     
-    <T extends Number2DMatrix> T set(int x, int y, Number value);
+    <T extends NumberMatrix> T set(int x, int y, Number value);
     
     Number get(int x, int y);
     
-    <T extends Number2DMatrix> Number dot(T other);
+    <T extends NumberMatrix> Number dot(T other);
     
-    public <T extends Number2DMatrix> T scalar(Number other);
+    public <T extends NumberMatrix> T scalar(Number other);
     
     public Number determinant(NumberDeterminantVisitor visitor);
     

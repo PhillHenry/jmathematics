@@ -1,6 +1,6 @@
 package com.google.code.jmathematics.matrix;
 
-public interface TwoDimensionalMatrix {
+public interface SizedMatrix {
 
     public int getHeight();
 

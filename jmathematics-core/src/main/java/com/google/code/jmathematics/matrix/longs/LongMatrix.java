@@ -1,19 +1,19 @@
 package com.google.code.jmathematics.matrix.longs;
 
 import com.google.code.jmathematics.matrix.Matrix;
-import com.google.code.jmathematics.matrix.TwoDimensionalMatrix;
+import com.google.code.jmathematics.matrix.SizedMatrix;
 import com.google.code.jmathematics.matrix.determinant.DoubleDeterminantVisitor;
 import com.google.code.jmathematics.matrix.determinant.LongDeterminantVisitor;
 
-public interface Long2DMatrix extends TwoDimensionalMatrix, Matrix<Long2DMatrix> {
+public interface LongMatrix extends SizedMatrix, Matrix<LongMatrix> {
     
-    <T extends Long2DMatrix> T set(int x, int y, long value);
+    <T extends LongMatrix> T set(int x, int y, long value);
     
     long get(int x, int y);
     
-    <T extends Long2DMatrix> long dot(T other);
+    <T extends LongMatrix> long dot(T other);
     
-    public <T extends Long2DMatrix> T scalar(long other);
+    public <T extends LongMatrix> T scalar(long other);
     
     public long determinant(LongDeterminantVisitor visitor);
     

@@ -1,7 +1,7 @@
 package com.google.code.jmathematics.matrix.determinant;
 
-import com.google.code.jmathematics.matrix.TwoDimensionalMatrix;
-import com.google.code.jmathematics.matrix.number.Number2DMatrix;
+import com.google.code.jmathematics.matrix.SizedMatrix;
+import com.google.code.jmathematics.matrix.number.NumberMatrix;
 import com.google.code.jmathematics.permutation.IntPermutations;
 import com.google.code.jmathematics.permutation.SimpleIntPermutation;
 import com.google.code.jmathematics.permutation.leviCivita.LeviCivita;
@@ -16,15 +16,15 @@ public class InPlaceNumberDeterminantVisitor implements
     private final IntPermutations intPermutation  = new SimpleIntPermutation();
 
     @Override
-    public Number calculateDeterminant(Number2DMatrix matrix) {
+    public Number calculateDeterminant(NumberMatrix matrix) {
         return determinant(matrix);
     }
 
-    private void checkSquare(TwoDimensionalMatrix matrix) {
+    private void checkSquare(SizedMatrix matrix) {
         if (matrix.getHeight() != matrix.getWidth()) throw NOT_SQUARE_X;
     }
 
-    private Number determinant(Number2DMatrix matrix) {
+    private Number determinant(NumberMatrix matrix) {
         checkSquare(matrix);
         int         n               = matrix.getHeight();
         Number      accumulator     = 0;
@@ -36,7 +36,7 @@ public class InPlaceNumberDeterminantVisitor implements
         return accumulator;
     }
     
-    private Number term(int[] indexes, Number2DMatrix matrix) {
+    private Number term(int[] indexes, NumberMatrix matrix) {
         int     n       = indexes.length;
         Number    term  = 1;
         int     sign    = leviCivita.apply(indexes);

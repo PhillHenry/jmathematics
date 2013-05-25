@@ -1,21 +1,21 @@
 package com.google.code.jmathematics.matrix.integer;
 
-import com.google.code.jmathematics.matrix.Matrix2DChecker;
-import com.google.code.jmathematics.matrix.NoisyMatrix2DChecker;
+import com.google.code.jmathematics.matrix.MatrixChecker;
+import com.google.code.jmathematics.matrix.NoisyMatrixChecker;
 import com.google.code.jmathematics.matrix.determinant.IntDeterminantVisitor;
 
-public class Mutable2DIntMatrix implements Int2DMatrix {
+public class MutableIntMatrix implements IntMatrix {
     
     private final int[][]           matrix;
     private final int               width;
     private final int               height;
-    private final Matrix2DChecker   sizeChecker;
+    private final MatrixChecker   sizeChecker;
 
-    public Mutable2DIntMatrix(int rows, int columns) {
+    public MutableIntMatrix(int rows, int columns) {
         width       = columns;
         height      = rows;
         matrix      = new int[width][height];
-        sizeChecker = new NoisyMatrix2DChecker(this);
+        sizeChecker = new NoisyMatrixChecker(this);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class Mutable2DIntMatrix implements Int2DMatrix {
     }
 
     @Override
-    public Int2DMatrix transpose() {
-        Mutable2DIntMatrix other = new Mutable2DIntMatrix(width, height);
+    public IntMatrix transpose() {
+        MutableIntMatrix other = new MutableIntMatrix(width, height);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 other.set(y, x, this.get(x, y));
@@ -40,10 +40,10 @@ public class Mutable2DIntMatrix implements Int2DMatrix {
     }
 
     @Override
-    public Mutable2DIntMatrix cross(Int2DMatrix other) {
+    public MutableIntMatrix cross(IntMatrix other) {
         sizeChecker.checkDimensions(other);
         
-        Mutable2DIntMatrix toReturn = new Mutable2DIntMatrix(height, other.getWidth());
+        MutableIntMatrix toReturn = new MutableIntMatrix(height, other.getWidth());
         
         for (int y = 0; y < height; y++) {
             for (int z = 0; z < other.getWidth(); z++) {
@@ -62,7 +62,7 @@ public class Mutable2DIntMatrix implements Int2DMatrix {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Mutable2DIntMatrix set(int x, int y, int value) {
+    public MutableIntMatrix set(int x, int y, int value) {
         matrix[x][y] = value;
         return this;
     }
@@ -73,7 +73,7 @@ public class Mutable2DIntMatrix implements Int2DMatrix {
     }
 
     @Override
-    public int dot(Int2DMatrix other) {
+    public int dot(IntMatrix other) {
         sizeChecker.checkDimensions(other);
 
         int total = 0;
@@ -87,7 +87,7 @@ public class Mutable2DIntMatrix implements Int2DMatrix {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Mutable2DIntMatrix scalar(int other) {
+    public MutableIntMatrix scalar(int other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 set(x, y, get(x, y) * other);

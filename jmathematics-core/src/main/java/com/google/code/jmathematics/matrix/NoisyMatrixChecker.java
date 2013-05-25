@@ -1,16 +1,16 @@
 package com.google.code.jmathematics.matrix;
 
-public class NoisyMatrix2DChecker implements Matrix2DChecker {
+public class NoisyMatrixChecker implements MatrixChecker {
     
-    private final TwoDimensionalMatrix me;
+    private final SizedMatrix me;
 
-    public NoisyMatrix2DChecker(TwoDimensionalMatrix me) {
+    public NoisyMatrixChecker(SizedMatrix me) {
         super();
         this.me = me;
     }
 
     @Override
-    public void checkDimensions(TwoDimensionalMatrix other) {
+    public void checkDimensions(SizedMatrix other) {
         if (other.getHeight() != me.getWidth()) {
             throw new IllegalArgumentException(
                     String.format(

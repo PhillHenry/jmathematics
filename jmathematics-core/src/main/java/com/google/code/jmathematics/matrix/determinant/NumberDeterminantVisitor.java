@@ -1,9 +1,9 @@
 package com.google.code.jmathematics.matrix.determinant;
 
-import com.google.code.jmathematics.matrix.number.Number2DMatrix;
+import com.google.code.jmathematics.matrix.number.NumberMatrix;
 
 public interface NumberDeterminantVisitor {
 
-    public Number calculateDeterminant(Number2DMatrix matrix);
+    public Number calculateDeterminant(NumberMatrix matrix);
     
 }
