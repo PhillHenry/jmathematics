@@ -23,6 +23,11 @@ public class MutableDoubleMatrix implements DoubleMatrix {
     }
 
     @Override
+	public DoubleMatrix set(int x, int y, Number value) {
+		return set(x, y, value.doubleValue());
+	}
+
+	@Override
     public MutableDoubleMatrix set(int x, int y, double value) {
         matrix[x][y] = value;
         return this;
@@ -50,6 +55,11 @@ public class MutableDoubleMatrix implements DoubleMatrix {
     }
 
     @Override
+	public Number dotProduct(DoubleMatrix other) {
+		return dot(other);
+	}
+
+	@Override
     public double dot(DoubleMatrix other) {
         sizeChecker.checkDimensions(other);
 
@@ -88,15 +98,57 @@ public class MutableDoubleMatrix implements DoubleMatrix {
         return height;
     }
     
+    @Override
+    public DoubleMatrix add(Number other) {
+        ADD.mutate(other.doubleValue());
+        return this;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public MutableDoubleMatrix scalar(double other) {
+        MULTIPLY.mutate(other);
+        return this;
+    }
+    
+    private final Mutator MULTIPLY = new Mutator() {
+        @Override
+        protected double transform(double value, double other) {
+            return value * other;
+        }
+    };
+    
+    private final Mutator ADD = new Mutator() {
+        @Override
+        protected double transform(double value, double other) {
+            return value + other;
+        }
+    };
+    
+    private abstract class Mutator {
+        public void mutate(double other) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    set(x, y, transform(get(x, y), other));
+                }
+            }
+        }
+        protected abstract double transform(double value, double other);
+    }
+
+    @Override
+    public DoubleMatrix add(DoubleMatrix other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                set(x, y, get(x, y) * other);
+                set(x, y, get(x, y) + other.get(x, y));
             }
         }
         return this;
+    }
+
+    @Override
+    public DoubleMatrix scalar(Number value) {
+        return scalar(value.doubleValue());
     }
 
     @Override

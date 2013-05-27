@@ -3,6 +3,7 @@ package com.google.code.jmathematics.matrix.integer;
 import com.google.code.jmathematics.matrix.MatrixChecker;
 import com.google.code.jmathematics.matrix.NoisyMatrixChecker;
 import com.google.code.jmathematics.matrix.determinant.IntDeterminantVisitor;
+import com.google.code.jmathematics.matrix.doubles.DoubleMatrix;
 
 public class MutableIntMatrix implements IntMatrix {
     
@@ -59,7 +60,12 @@ public class MutableIntMatrix implements IntMatrix {
 
         return toReturn;
     }
-
+    
+    @Override
+	public MutableIntMatrix set(int x, int y, Number value) {
+		return set(x, y, value.intValue());
+	}
+    
     @SuppressWarnings("unchecked")
     @Override
     public MutableIntMatrix set(int x, int y, int value) {
@@ -73,6 +79,11 @@ public class MutableIntMatrix implements IntMatrix {
     }
 
     @Override
+	public Number dotProduct(IntMatrix other) {
+		return dot(other);
+	}
+
+	@Override
     public int dot(IntMatrix other) {
         sizeChecker.checkDimensions(other);
 
@@ -85,17 +96,59 @@ public class MutableIntMatrix implements IntMatrix {
         return total;
     }
 
+    @Override
+    public IntMatrix scalar(Number value) {
+        return scalar(value.intValue());
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public MutableIntMatrix scalar(int other) {
+        MULTIPLY.mutate(other);
+        return this;
+    }
+
+    @Override
+    public IntMatrix add(Number value) {
+        ADD.mutate(value.intValue());
+        return this;
+    }
+
+    @Override
+    public IntMatrix add(IntMatrix other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                set(x, y, get(x, y) * other);
+                set(x, y, get(x, y) + other.get(x, y));
             }
         }
         return this;
     }
 
+    private final Mutator MULTIPLY = new Mutator() {
+        @Override
+        protected double transform(int value, int other) {
+            return value * other;
+        }
+    };
+    
+    private final Mutator ADD = new Mutator() {
+        @Override
+        protected double transform(int value, int other) {
+            return value + other;
+        }
+    };
+    
+    private abstract class Mutator {
+        public void mutate(int other) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    set(x, y, transform(get(x, y), other));
+                }
+            }
+        }
+        protected abstract double transform(int value, int other);
+    }
+    
     @Override
     public int determinant(IntDeterminantVisitor visitor) {
         return visitor.calculateDeterminant(this);

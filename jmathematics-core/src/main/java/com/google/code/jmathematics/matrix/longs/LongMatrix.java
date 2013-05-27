@@ -5,7 +5,7 @@ import com.google.code.jmathematics.matrix.SizedMatrix;
 import com.google.code.jmathematics.matrix.determinant.DoubleDeterminantVisitor;
 import com.google.code.jmathematics.matrix.determinant.LongDeterminantVisitor;
 
-public interface LongMatrix extends SizedMatrix, Matrix<LongMatrix> {
+public interface LongMatrix extends Matrix<LongMatrix> {
     
     <T extends LongMatrix> T set(int x, int y, long value);
     

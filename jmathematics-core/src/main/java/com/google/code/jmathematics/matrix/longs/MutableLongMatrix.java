@@ -61,7 +61,12 @@ public class MutableLongMatrix implements LongMatrix {
         return toReturn;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	public LongMatrix set(int x, int y, Number value) {
+    	return set(x, y, value.longValue());
+	}
+
+	@SuppressWarnings("unchecked")
     @Override
     public MutableLongMatrix set(int x, int y, long value) {
         matrix[x][y] = value;
@@ -74,6 +79,11 @@ public class MutableLongMatrix implements LongMatrix {
     }
 
     @Override
+	public Number dotProduct(LongMatrix other) {
+		return dot(other);
+	}
+
+	@Override
     public long dot(LongMatrix other) {
         sizeChecker.checkDimensions(other);
 
@@ -86,17 +96,58 @@ public class MutableLongMatrix implements LongMatrix {
         return total;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public MutableLongMatrix scalar(long other) {
+    public LongMatrix add(LongMatrix other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                set(x, y, get(x, y) * other);
+                set(x, y, get(x, y) + other.get(x, y));
             }
         }
         return this;
     }
 
+    @Override
+    public LongMatrix scalar(Number value) {
+        return scalar(value.longValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MutableLongMatrix scalar(long other) {
+        MULTIPLY.mutate(other);
+        return this;
+    }
+    
+    @Override
+    public LongMatrix add(Number value) {
+        ADD.mutate(value.longValue());
+        return this;
+    }
+
+    private final Mutator MULTIPLY = new Mutator() {
+        @Override
+        protected double transform(long value, long other) {
+            return value * other;
+        }
+    };
+    
+    private final Mutator ADD = new Mutator() {
+        @Override
+        protected double transform(long value, long other) {
+            return value + other;
+        }
+    };
+    
+    private abstract class Mutator {
+        public void mutate(long other) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    set(x, y, transform(get(x, y), other));
+                }
+            }
+        }
+        protected abstract double transform(long value, long other);
+    }
     @Override
     public long determinant(LongDeterminantVisitor visitor) {
         return visitor.calculateDeterminant(this);

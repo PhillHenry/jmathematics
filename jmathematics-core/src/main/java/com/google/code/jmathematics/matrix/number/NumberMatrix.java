@@ -12,8 +12,6 @@ public interface NumberMatrix extends SizedMatrix, Matrix<NumberMatrix> {
     
     <T extends NumberMatrix> Number dot(T other);
     
-    public <T extends NumberMatrix> T scalar(Number other);
-    
     public Number determinant(NumberDeterminantVisitor visitor);
     
     public abstract Number multiplyAndAdd(Number accumulator, Number thisValue, Number thatValue);

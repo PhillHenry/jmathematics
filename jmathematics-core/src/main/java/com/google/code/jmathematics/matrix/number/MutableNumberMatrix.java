@@ -30,7 +30,7 @@ public abstract class MutableNumberMatrix implements NumberMatrix {
 
     @Override
     public MutableNumberMatrix transpose() {
-        MutableNumberMatrix other = create(width, height);
+        MutableNumberMatrix other = create(height, width);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 other.set(y, x, this.get(x, y));
@@ -80,10 +80,15 @@ public abstract class MutableNumberMatrix implements NumberMatrix {
     }
 
     @Override
+	public Number dotProduct(NumberMatrix other) {
+		return dot(other);
+	}
+
+	@Override
     public Number dot(NumberMatrix other) {
         sizeChecker.checkDimensions(other);
 
-        Number total = 0;
+        Number total = zero();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 total = multiplyAndAdd(total, matrix[x][y], other.get(y, x));
@@ -92,20 +97,69 @@ public abstract class MutableNumberMatrix implements NumberMatrix {
         return total;
     }
 
+    @Override
+    public NumberMatrix add(Number value) {
+        ADD.mutate(value);
+        return this;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public MutableNumberMatrix scalar(Number other) {
+        MULTIPLY.mutate(other);
+        return this;
+    }
+
+    @Override
+    public NumberMatrix add(NumberMatrix other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                set(x, y, multiply(get(x, y), other));
+                set(x, y, add(get(x, y), other.get(x, y)));
             }
         }
         return this;
     }
 
+    private final Mutator MULTIPLY = new Mutator() {
+        @Override
+        protected Number transform(Number value, Number other) {
+            return multiply(value, other);
+        }
+    };
+    
+    private final Mutator ADD = new Mutator() {
+        @Override
+        protected Number transform(Number value, Number other) {
+            return add(value, other);
+        }
+    };
+    
+    private abstract class Mutator {
+        public void mutate(Number other) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    set(x, y, transform(get(x, y), other));
+                }
+            }
+        }
+        protected abstract Number transform(Number value, Number other);
+    }
+    
+    
     @Override
     public Number determinant(NumberDeterminantVisitor visitor) {
         return visitor.calculateDeterminant(this);
     }
-
+    
+    @Override
+    public String toString() {
+        StringBuffer szb = new StringBuffer();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                szb.append("\t").append(this.get(x, y));
+            }
+            szb.append("\n");
+        }
+        return szb.toString();
+    }
 }
