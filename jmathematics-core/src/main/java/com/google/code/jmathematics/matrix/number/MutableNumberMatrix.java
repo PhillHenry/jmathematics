@@ -4,7 +4,7 @@ import com.google.code.jmathematics.matrix.MatrixChecker;
 import com.google.code.jmathematics.matrix.NoisyMatrixChecker;
 import com.google.code.jmathematics.matrix.determinant.NumberDeterminantVisitor;
 
-public abstract class MutableNumberMatrix implements NumberMatrix {
+public abstract class MutableNumberMatrix<T extends Number> implements NumberMatrix {
     
     private final Number[][]        matrix;
     private final int               width;
