@@ -2,8 +2,8 @@ package com.google.code.jmathematics.matrix.determinant;
 
 import com.google.code.jmathematics.matrix.number.NumberMatrix;
 
-public interface NumberDeterminantVisitor {
+public interface NumberDeterminantVisitor<N extends Number> {
 
-    public Number calculateDeterminant(NumberMatrix matrix);
+    public N calculateDeterminant(NumberMatrix matrix);
     
 }

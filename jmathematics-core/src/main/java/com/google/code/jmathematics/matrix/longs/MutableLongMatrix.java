@@ -62,7 +62,7 @@ public class MutableLongMatrix implements LongMatrix {
     }
 
     @Override
-	public LongMatrix set(int x, int y, Number value) {
+	public LongMatrix set(int x, int y, Long value) {
     	return set(x, y, value.longValue());
 	}
 
@@ -79,7 +79,7 @@ public class MutableLongMatrix implements LongMatrix {
     }
 
     @Override
-	public Number dotProduct(LongMatrix other) {
+	public Long dotProduct(LongMatrix other) {
 		return dot(other);
 	}
 
@@ -107,7 +107,7 @@ public class MutableLongMatrix implements LongMatrix {
     }
 
     @Override
-    public LongMatrix scalar(Number value) {
+    public LongMatrix scalar(Long value) {
         return scalar(value.longValue());
     }
 
@@ -119,21 +119,21 @@ public class MutableLongMatrix implements LongMatrix {
     }
     
     @Override
-    public LongMatrix add(Number value) {
+    public LongMatrix add(Long value) {
         ADD.mutate(value.longValue());
         return this;
     }
 
     private final Mutator MULTIPLY = new Mutator() {
         @Override
-        protected double transform(long value, long other) {
+        protected long transform(long value, long other) {
             return value * other;
         }
     };
     
     private final Mutator ADD = new Mutator() {
         @Override
-        protected double transform(long value, long other) {
+        protected long transform(long value, long other) {
             return value + other;
         }
     };
@@ -146,7 +146,7 @@ public class MutableLongMatrix implements LongMatrix {
                 }
             }
         }
-        protected abstract double transform(long value, long other);
+        protected abstract long transform(long value, long other);
     }
     @Override
     public long determinant(LongDeterminantVisitor visitor) {

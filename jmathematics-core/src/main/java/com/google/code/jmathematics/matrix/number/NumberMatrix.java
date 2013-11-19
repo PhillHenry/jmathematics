@@ -1,24 +1,23 @@
 package com.google.code.jmathematics.matrix.number;
 
 import com.google.code.jmathematics.matrix.Matrix;
-import com.google.code.jmathematics.matrix.SizedMatrix;
 import com.google.code.jmathematics.matrix.determinant.NumberDeterminantVisitor;
 
-public interface NumberMatrix extends Matrix<NumberMatrix> {
+public interface NumberMatrix<U extends Number> extends Matrix<NumberMatrix<U>, U> {
+//    
+//    <T extends NumberMatrix<U>> T set(int x, int y, U value);
+//    
+    U get(int x, int y);
     
-    <T extends NumberMatrix> T set(int x, int y, Number value);
+    <T extends NumberMatrix<U>> U dot(T other);
     
-    Number get(int x, int y);
+    public U determinant(NumberDeterminantVisitor<U> visitor);
     
-    <T extends NumberMatrix> Number dot(T other);
+    public abstract U multiplyAndAdd(U accumulator, U thisValue, U thatValue);
     
-    public Number determinant(NumberDeterminantVisitor visitor);
+    public abstract U multiply(U thisValue, U thatValue);
     
-    public abstract Number multiplyAndAdd(Number accumulator, Number thisValue, Number thatValue);
-    
-    public abstract Number multiply(Number thisValue, Number thatValue);
-    
-    public abstract Number add(Number thisValue, Number thatValue);
+    public abstract U add(U thisValue, U thatValue);
     
 }
 

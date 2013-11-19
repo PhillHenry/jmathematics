@@ -62,7 +62,7 @@ public class MutableIntMatrix implements IntMatrix {
     }
     
     @Override
-	public MutableIntMatrix set(int x, int y, Number value) {
+	public MutableIntMatrix set(int x, int y, Integer value) {
 		return set(x, y, value.intValue());
 	}
     
@@ -79,7 +79,7 @@ public class MutableIntMatrix implements IntMatrix {
     }
 
     @Override
-	public Number dotProduct(IntMatrix other) {
+	public Integer dotProduct(IntMatrix other) {
 		return dot(other);
 	}
 
@@ -97,7 +97,7 @@ public class MutableIntMatrix implements IntMatrix {
     }
 
     @Override
-    public IntMatrix scalar(Number value) {
+    public IntMatrix scalar(Integer value) {
         return scalar(value.intValue());
     }
 
@@ -109,7 +109,7 @@ public class MutableIntMatrix implements IntMatrix {
     }
 
     @Override
-    public IntMatrix add(Number value) {
+    public IntMatrix add(Integer value) {
         ADD.mutate(value.intValue());
         return this;
     }
@@ -126,14 +126,14 @@ public class MutableIntMatrix implements IntMatrix {
 
     private final Mutator MULTIPLY = new Mutator() {
         @Override
-        protected double transform(int value, int other) {
+        protected int transform(int value, int other) {
             return value * other;
         }
     };
     
     private final Mutator ADD = new Mutator() {
         @Override
-        protected double transform(int value, int other) {
+        protected int transform(int value, int other) {
             return value + other;
         }
     };
@@ -146,7 +146,7 @@ public class MutableIntMatrix implements IntMatrix {
                 }
             }
         }
-        protected abstract double transform(int value, int other);
+        protected abstract int transform(int value, int other);
     }
     
     @Override

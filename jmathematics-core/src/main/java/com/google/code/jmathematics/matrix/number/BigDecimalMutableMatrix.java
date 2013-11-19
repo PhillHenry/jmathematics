@@ -2,25 +2,25 @@ package com.google.code.jmathematics.matrix.number;
 
 import java.math.BigDecimal;
 
-public class BigDecimalMutableMatrix extends MutableNumberMatrix {
+public class BigDecimalMutableMatrix extends MutableNumberMatrix<BigDecimal> {
 
     public BigDecimalMutableMatrix(int rows, int columns) {
         super(rows, columns);
     }
 
     @Override
-    public BigDecimal add(Number thisValue, Number thatValue) {
-        return ((BigDecimal)thisValue).add((BigDecimal)thatValue);
+    public BigDecimal add(BigDecimal thisValue, BigDecimal thatValue) {
+        return (thisValue).add(thatValue);
     }
 
     @Override
-    public BigDecimal multiplyAndAdd(Number accumulator, Number thisValue,
-            Number thatValue) {
+    public BigDecimal multiplyAndAdd(BigDecimal accumulator, BigDecimal thisValue,
+        BigDecimal thatValue) {
         return add(accumulator, multiply(thisValue, thatValue));
     }
 
     @Override
-    public BigDecimal multiply(Number thisValue, Number thatValue) {
+    public BigDecimal multiply(BigDecimal thisValue, BigDecimal thatValue) {
         return ((BigDecimal)thisValue).multiply((BigDecimal)thatValue);
     }
 

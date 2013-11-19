@@ -23,7 +23,7 @@ public class MutableDoubleMatrix implements DoubleMatrix {
     }
 
     @Override
-	public DoubleMatrix set(int x, int y, Number value) {
+	public DoubleMatrix set(int x, int y, Double value) {
 		return set(x, y, value.doubleValue());
 	}
 
@@ -55,7 +55,7 @@ public class MutableDoubleMatrix implements DoubleMatrix {
     }
 
     @Override
-	public Number dotProduct(DoubleMatrix other) {
+	public Double dotProduct(DoubleMatrix other) {
 		return dot(other);
 	}
 
@@ -99,7 +99,7 @@ public class MutableDoubleMatrix implements DoubleMatrix {
     }
     
     @Override
-    public DoubleMatrix add(Number other) {
+    public DoubleMatrix add(Double other) {
         ADD.mutate(other.doubleValue());
         return this;
     }
@@ -147,7 +147,7 @@ public class MutableDoubleMatrix implements DoubleMatrix {
     }
 
     @Override
-    public DoubleMatrix scalar(Number value) {
+    public DoubleMatrix scalar(Double value) {
         return scalar(value.doubleValue());
     }
 

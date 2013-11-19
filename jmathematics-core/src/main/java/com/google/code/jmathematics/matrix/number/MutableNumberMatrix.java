@@ -4,9 +4,9 @@ import com.google.code.jmathematics.matrix.MatrixChecker;
 import com.google.code.jmathematics.matrix.NoisyMatrixChecker;
 import com.google.code.jmathematics.matrix.determinant.NumberDeterminantVisitor;
 
-public abstract class MutableNumberMatrix<T extends Number> implements NumberMatrix {
+public abstract class MutableNumberMatrix<T extends Number> implements NumberMatrix<T> {
     
-    private final Number[][]        matrix;
+    private final T[][]             matrix;
     private final int               width;
     private final int               height;
     private final MatrixChecker   sizeChecker;
@@ -14,7 +14,7 @@ public abstract class MutableNumberMatrix<T extends Number> implements NumberMat
     public MutableNumberMatrix(int rows, int columns) {
         width       = columns;
         height      = rows;
-        matrix      = new Number[width][height];
+        matrix      = (T[][]) new Number[width][height];
         sizeChecker = new NoisyMatrixChecker(this);
     }
     
@@ -29,27 +29,27 @@ public abstract class MutableNumberMatrix<T extends Number> implements NumberMat
     }
 
     @Override
-    public <T extends NumberMatrix> T transpose() {
-        MutableNumberMatrix other = create(height, width);
+    public <U extends NumberMatrix<T>> U transpose() {
+        MutableNumberMatrix<T> other = create(height, width);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 other.set(y, x, this.get(x, y));
             }
         }
-        return (T)other;
+        return (U)other;
     }
 
     @Override
-    public MutableNumberMatrix cross(NumberMatrix other) {
+    public MutableNumberMatrix<T> cross(NumberMatrix<T> other) {
         sizeChecker.checkDimensions(other);
-        MutableNumberMatrix toReturn = create(height, other.getWidth());
+        MutableNumberMatrix<T> toReturn = create(height, other.getWidth());
 
         for (int y = 0; y < height; y++) {
             for (int z = 0; z < other.getWidth(); z++) {
-                Number total = zero();
+                T total = zero();
                 for (int x = 0; x < width; x++) {
-                    Number thisVal = this.get(x, y);
-                    Number thatVal = other.get(z, x);
+                    T thisVal = this.get(x, y);
+                    T thatVal = other.get(z, x);
                     total = multiplyAndAdd(total, thisVal, thatVal);
                 }
                 toReturn = toReturn.set(z, y, total);
@@ -59,95 +59,93 @@ public abstract class MutableNumberMatrix<T extends Number> implements NumberMat
         return toReturn;
     }
     
-    public abstract Number zero();
+    public abstract T zero();
     
-    public abstract Number multiplyAndAdd(Number accumulator, Number thisValue, Number thatValue);
+    public abstract T multiplyAndAdd(T accumulator, T thisValue, T thatValue);
     
-    public abstract Number multiply(Number thisValue, Number thatValue);
+    public abstract T multiply(T thisValue, T thatValue);
     
-    protected abstract MutableNumberMatrix create(int width, int height);
+    protected abstract MutableNumberMatrix<T> create(int width, int height);
 
-    @SuppressWarnings("unchecked")
     @Override
-    public MutableNumberMatrix set(int x, int y, Number value) {
+    public MutableNumberMatrix<T> set(int x, int y, T value) {
         matrix[x][y] = value;
         return this;
     }
 
     @Override
-    public Number get(int x, int y) {
+    public T get(int x, int y) {
         return matrix[x][y];
     }
 
     @Override
-	public Number dotProduct(NumberMatrix other) {
+	public T dotProduct(NumberMatrix<T> other) {
 		return dot(other);
 	}
 
 	@Override
-    public Number dot(NumberMatrix other) {
+    public <U extends NumberMatrix<T>> T dot(U other) {
         sizeChecker.checkDimensions(other);
 
-        Number total = zero();
+        T total = zero();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 total = multiplyAndAdd(total, matrix[x][y], other.get(y, x));
             }
         }
-        return total;
+        return (T)total;
     }
 
     @Override
-    public NumberMatrix add(Number value) {
+    public NumberMatrix<T> add(T value) {
         ADD.mutate(value);
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends NumberMatrix> T scalar(Number other) {
+    public <U extends NumberMatrix<T>> U scalar(T other) {
         MULTIPLY.mutate(other);
-        return (T)this;
+        return (U)this;
     }
 
     @Override
-    public <T extends NumberMatrix> T add(NumberMatrix other) {
+    public <U extends NumberMatrix<T>> U add(NumberMatrix<T> other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 set(x, y, add(get(x, y), other.get(x, y)));
             }
         }
-        return (T)this;
+        return (U)this;
     }
 
     private final Mutator MULTIPLY = new Mutator() {
         @Override
-        protected Number transform(Number value, Number other) {
+        protected T transform(T value, T other) {
             return multiply(value, other);
         }
     };
     
     private final Mutator ADD = new Mutator() {
         @Override
-        protected Number transform(Number value, Number other) {
+        protected T transform(T value, T other) {
             return add(value, other);
         }
     };
     
     private abstract class Mutator {
-        public void mutate(Number other) {
+        public void mutate(T other) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     set(x, y, transform(get(x, y), other));
                 }
             }
         }
-        protected abstract Number transform(Number value, Number other);
+        protected abstract T transform(T value, T other);
     }
     
     
     @Override
-    public Number determinant(NumberDeterminantVisitor visitor) {
+    public T determinant(NumberDeterminantVisitor<T> visitor) {
         return visitor.calculateDeterminant(this);
     }
     

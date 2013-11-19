@@ -4,7 +4,7 @@ import com.google.code.jmathematics.matrix.Matrix;
 import com.google.code.jmathematics.matrix.SizedMatrix;
 import com.google.code.jmathematics.matrix.determinant.DoubleDeterminantVisitor;
 
-public interface DoubleMatrix extends Matrix<DoubleMatrix> {
+public interface DoubleMatrix extends Matrix<DoubleMatrix, Double> {
 
     <T extends DoubleMatrix> T set(int x, int y, double value);
     

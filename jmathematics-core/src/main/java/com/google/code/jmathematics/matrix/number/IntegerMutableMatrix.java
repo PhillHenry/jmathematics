@@ -1,35 +1,35 @@
 package com.google.code.jmathematics.matrix.number;
 
 @SuppressWarnings("unchecked")
-public class IntegerMutableMatrix extends MutableNumberMatrix {
+public class IntegerMutableMatrix extends MutableNumberMatrix<Integer> {
 
     public IntegerMutableMatrix(int rows, int columns) {
         super(rows, columns);
     }
 
     @Override
-    public Number add(Number thisValue, Number thatValue) {
+    public Integer add(Integer thisValue, Integer thatValue) {
         return ((Integer)thisValue) + ((Integer)thatValue);
     }
 
     @Override
-    public Number multiplyAndAdd(Number accumulator, Number thisValue,
-            Number thatValue) {
+    public Integer multiplyAndAdd(Integer accumulator, Integer thisValue,
+        Integer thatValue) {
         return add(accumulator, multiply(thisValue, thatValue));
     }
 
     @Override
-    public Number multiply(Number thisValue, Number thatValue) {
-        return ((Integer)thisValue) * ((Integer)thatValue);
+    public Integer multiply(Integer thisValue, Integer thatValue) {
+        return (thisValue * thatValue);
     }
 
     @Override
-    protected MutableNumberMatrix create(int width, int height) {
+    protected MutableNumberMatrix<Integer> create(int width, int height) {
         return new IntegerMutableMatrix(height, width);
     }
 
     @Override
-    public Number zero() {
+    public Integer zero() {
         return 0;
     }
 
