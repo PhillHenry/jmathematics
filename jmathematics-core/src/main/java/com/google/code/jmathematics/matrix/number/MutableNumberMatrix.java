@@ -29,14 +29,14 @@ public abstract class MutableNumberMatrix implements NumberMatrix {
     }
 
     @Override
-    public MutableNumberMatrix transpose() {
+    public <T extends NumberMatrix> T transpose() {
         MutableNumberMatrix other = create(height, width);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 other.set(y, x, this.get(x, y));
             }
         }
-        return other;
+        return (T)other;
     }
 
     @Override
@@ -105,19 +105,19 @@ public abstract class MutableNumberMatrix implements NumberMatrix {
 
     @SuppressWarnings("unchecked")
     @Override
-    public MutableNumberMatrix scalar(Number other) {
+    public <T extends NumberMatrix> T scalar(Number other) {
         MULTIPLY.mutate(other);
-        return this;
+        return (T)this;
     }
 
     @Override
-    public NumberMatrix add(NumberMatrix other) {
+    public <T extends NumberMatrix> T add(NumberMatrix other) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 set(x, y, add(get(x, y), other.get(x, y)));
             }
         }
-        return this;
+        return (T)this;
     }
 
     private final Mutator MULTIPLY = new Mutator() {

@@ -4,7 +4,7 @@ import com.google.code.jmathematics.matrix.Matrix;
 import com.google.code.jmathematics.matrix.SizedMatrix;
 import com.google.code.jmathematics.matrix.determinant.NumberDeterminantVisitor;
 
-public interface NumberMatrix extends SizedMatrix, Matrix<NumberMatrix> {
+public interface NumberMatrix extends Matrix<NumberMatrix> {
     
     <T extends NumberMatrix> T set(int x, int y, Number value);
     

@@ -1,13 +1,13 @@
 package com.google.code.jmathematics.matrix;
 
 
-public interface Matrix<T extends Matrix> extends SizedMatrix {
+public interface Matrix<T extends Matrix<?>> extends SizedMatrix {
 
-    public T transpose();
+    public <U extends T> U transpose();
     
     public T cross(T other);
 
-    public T add(T other);
+    public <U extends T> U add(T other);
     
     /**
      * A more generic interface but slower than using primitives methods.
@@ -27,6 +27,6 @@ public interface Matrix<T extends Matrix> extends SizedMatrix {
     /**
      * A more generic interface but slower than using primitives methods.
      */
-    public T scalar(Number value);
+    public <U extends T> U scalar(Number value);
     
 }
