@@ -1,7 +1,7 @@
 package com.google.code.jmathematics.matrix;
 
 
-public interface Matrix<T extends Matrix<?, N>, N extends Number> extends SizedMatrix {
+public interface Matrix<T extends Matrix<T, N>, N extends Number> extends SizedMatrix {
 
     public <U extends T> U transpose();
     
