@@ -4,9 +4,7 @@ import com.google.code.jmathematics.matrix.Matrix;
 import com.google.code.jmathematics.matrix.determinant.NumberDeterminantVisitor;
 
 public interface NumberMatrix<U extends Number> extends Matrix<NumberMatrix<U>, U> {
-//    
-//    <T extends NumberMatrix<U>> T set(int x, int y, U value);
-//    
+    
     U get(int x, int y);
     
     <T extends NumberMatrix<U>> U dot(T other);

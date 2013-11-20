@@ -35,7 +35,7 @@ public class BigDecimalMutableMatrix extends MutableNumberMatrix<BigDecimal> {
     }
 
     @Override
-    public BigDecimal dotProduct(NumberMatrix other) {
+    public BigDecimal dotProduct(NumberMatrix<BigDecimal> other) {
         return (BigDecimal)super.dotProduct(other);
     }
 
